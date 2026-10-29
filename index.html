@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Kelime Dünyası - Eş ve Zıt Anlamlı Sözcükler</title>
+  <meta name="description" content="İlkokul öğrencileri için Türkçe eş ve zıt anlamlı kelimeleri eğlenceli ve akıllı tekrar yöntemiyle öğreten interaktif oyun.">
+  <meta name="theme-color" content="#4F46E5">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📚</text></svg>">
+</head>
+<body>
+
+  <div class="app-container">
+    
+    <!-- Üst Kontrol ve Bilgi Çubuğu -->
+    <header class="app-header">
+      <div class="header-left">
+        <button id="btn-home" class="icon-btn" title="Ana Sayfaya Dön" aria-label="Ana Sayfaya Dön">
+          🏠
+        </button>
+        <div id="header-mode-display" class="header-title-box" style="display: none;">
+          <span id="header-mode-badge" class="header-mode-badge badge-synonym">Eş Anlamlılar</span>
+        </div>
+      </div>
+      
+      <div class="header-right">
+        <div id="streak-counter" class="streak-badge" title="Doğru Cevap Serisi">
+          🔥 <span id="streak-number">0</span>
+        </div>
+        <button id="btn-fast-toggle" class="icon-btn" title="Hızlı Soru Modu: Kapalı (Açmak için tıkla)" aria-label="Hızlı Soru Modunu Aç veya Kapat">
+          ⚡
+        </button>
+        <button id="btn-sound-toggle" class="icon-btn" title="Ses Aç/Kapat" aria-label="Sesi Aç veya Kapat">
+          🔊
+        </button>
+      </div>
+    </header>
+
+    <!-- GÖRÜNÜM 1: ANA SAYFA (MOD SEÇİMİ) -->
+    <main id="view-home" class="view-home">
+      <div class="hero-box">
+        <div class="hero-logo">🦉</div>
+        <h1 class="hero-title">Kelime Dünyası</h1>
+        <p class="hero-subtitle">Eş ve zıt anlamlı kelimeleri keşfetmeye hazır mısın? Öğrenmek istediğin bölümü seç ve başla!</p>
+      </div>
+
+      <div class="mode-cards-grid">
+        <!-- Eş Anlamlılar Kartı -->
+        <div id="card-mode-synonym" class="mode-card card-synonym" role="button" tabindex="0">
+          <div class="mode-card-icon">📘</div>
+          <h2 class="mode-card-title">Eş Anlamlılar</h2>
+          <p class="mode-card-desc">Yazılışları farklı ama anlamları aynı olan zengin kelimeleri bul!</p>
+          <button class="mode-card-btn" tabindex="-1">Hemen Başla ➔</button>
+        </div>
+
+        <!-- Zıt Anlamlılar Kartı -->
+        <div id="card-mode-antonym" class="mode-card card-antonym" role="button" tabindex="0">
+          <div class="mode-card-icon">📙</div>
+          <h2 class="mode-card-title">Zıt Anlamlılar</h2>
+          <p class="mode-card-desc">Birbirinin tam karşıtı olan eğlenceli ve güçlü kelimeleri eşleştir!</p>
+          <button class="mode-card-btn" tabindex="-1">Hemen Başla ➔</button>
+        </div>
+      </div>
+    </main>
+
+    <!-- GÖRÜNÜM 2: OYUN / SORU EKRANI -->
+    <main id="view-game" class="view-game" style="display: none;">
+      <!-- Soru Kartı -->
+      <section class="question-card">
+        <div id="category-badge" class="category-tag">
+          🎨 <span>Renkler</span>
+        </div>
+        <p id="question-prompt-text" class="question-prompt">kelimesinin eş anlamlısı hangisidir?</p>
+        <div id="question-word" class="question-word">al</div>
+      </section>
+
+      <!-- 4 Seçenek Butonları -->
+      <section id="options-container" class="options-grid">
+        <button class="option-btn" data-index="0">kırmızı</button>
+        <button class="option-btn" data-index="1">mavi</button>
+        <button class="option-btn" data-index="2">yeşil</button>
+        <button class="option-btn" data-index="3">sarı</button>
+      </section>
+
+      <!-- Alt Bilgi / İpucu -->
+      <footer class="game-footer-info">
+        <span id="retry-hint-text">Doğru cevabı bulana kadar seçenekleri deneyebilirsin! 💡</span>
+      </footer>
+    </main>
+
+  </div>
+
+  <!-- BİLGİ PANELİ & "OKUDUM" MODALI -->
+  <div id="info-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-word-title">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-badge-success">✨ Tebrikler, Doğru Cevap!</div>
+        <h2 id="modal-word-title" class="modal-word-title">
+          <span id="modal-q-word">al</span> = <span id="modal-a-word">kırmızı</span>
+        </h2>
+      </div>
+
+      <!-- Anlam -->
+      <div class="info-section">
+        <div class="info-label">📖 Kelime Anlamı</div>
+        <p id="modal-meaning-text" class="info-content">Kanın rengi, kızıl, parlak kırmızı renk.</p>
+      </div>
+
+      <!-- Varsa Diğer Eş/Zıt Anlamlılar -->
+      <div id="modal-variants-section" class="info-section alt-synonyms" style="display: none;">
+        <div id="modal-variants-label" class="info-label">🔁 Diğer Eş Anlamlıları</div>
+        <p id="modal-variants-text" class="info-content">kızıl</p>
+      </div>
+
+      <!-- Örnek Cümle -->
+      <div class="info-section info-example">
+        <div class="info-label">💬 Örnek Cümle</div>
+        <p id="modal-example-text" class="info-content">"Al bayrağımız göklerde gururla dalgalanıyor."</p>
+      </div>
+
+      <!-- "Okudum" Butonu -->
+      <button id="btn-modal-read" class="btn-read">
+        <span>Okudum, Sıradaki Soru ➔</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- JavaScript Kodları -->
+  <script src="js/wordsData.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
