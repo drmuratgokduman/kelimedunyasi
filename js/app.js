@@ -210,6 +210,8 @@ class WordGame {
     this.sound.playClick();
     this.isFastMode = !this.isFastMode;
 
+    document.body.classList.toggle("fast-mode-active", this.isFastMode);
+
     if (this.isFastMode) {
       this.btnFastToggle.classList.add("active-fast");
       this.btnFastToggle.title = "Hızlı Soru Modu: AÇIK (Bilgi paneli açılmadan doğrudan geçer)";
